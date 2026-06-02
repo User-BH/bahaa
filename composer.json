@@ -1,0 +1,21 @@
+{
+    "name": "bahaa-io/gateway-php-sdk",
+    "description": "Framework-agnostic PHP SDK for the Bahaa Gateway — accept crypto payments. Works with or without Composer.",
+    "type": "library",
+    "keywords": ["bahaa", "gateway", "crypto", "payments", "sdk", "tron", "ton", "usdt"],
+    "homepage": "https://bahaa.io",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BahaaGateway\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
