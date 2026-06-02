@@ -165,6 +165,29 @@ $url = $client->paymentUrl('inv_abc123', 'en', 'light');
 // https://gateway.bahaa.io/inv_abc123?lang=en&theme=light
 ```
 
+### Return page after payment (`redirect_url`)
+
+When you create an invoice with `redirect_url`, the gateway redirects the
+customer's browser back to that URL after a terminal state and appends
+`?invoice_id=...&status=...&ts=...`.
+
+**Those query params are UX hints only and can be spoofed** — never fulfil an
+order based on them. On the return page, re-check the real status server-side
+(and rely on the signed webhook for actual fulfilment). A complete landing page
+is in [`examples/redirect-return.php`](examples/redirect-return.php):
+
+```php
+$invoiceId = (string) ($_GET['invoice_id'] ?? '');
+$invoice = $client->getInvoice($invoiceId); // authoritative, server-side
+$status  = $invoice['status'] ?? ($invoice['data']['status'] ?? 'unknown');
+// show success/pending/cancelled based on $status — not on $_GET['status']
+```
+
+> **redirect vs webhook:** the `redirect_url` page is for the *customer's UX*
+> (it only fires if the browser actually comes back). Do real order fulfilment
+> in your **webhook** handler (`examples/webhook.php`), which is signed and
+> reliable.
+
 ## 10. Hosted checkout (public)
 
 These map to the public, browser-safe checkout routes and are **not signed**:
